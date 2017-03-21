@@ -1,0 +1,14 @@
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
+canvas {
+  border: 1px solid;
+}
+
+#lives{
+  position: absolute;
+  padding-top: 5px;
+  padding-left: 5px;
+  color: darkred;
+}
