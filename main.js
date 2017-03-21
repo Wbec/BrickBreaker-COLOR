@@ -15,11 +15,11 @@ var RIGHT=39
 var prevTime=undefined
 //var canvas=document.getElementById('canvas')
 //console.log(canvas)  //prints null??
-var WIDTH=300
-var HEIGHT=350
+var WIDTH=500
+var HEIGHT=500
 
 var MAXSPEED=0.3
-var STARTSPEED=0.2
+var STARTSPEED=0.1
 var lives=3
 var gameOver=false
 
@@ -139,21 +139,22 @@ function ball() {
   this.right=function(){
     return this.x+this.radius
   }
-  this.direction=function(val){
-    if (val==undefined){
+  this.direction=function(angle){
+    if (angle==undefined){
       //incomplete
       Math.arctan(this.vy/this.vx)
     }
     var s=this.speed()
-    console.log("")
-    this.vx=Math.sin(val)*s
-    this.vy=Math.cos(val)*s
-    //returns direction using trig
-  }//incomplete
+    console.log(angle)
+    console.log(s)
+    this.vy= -Math.sin(angle)*s
+    this.vx=Math.cos(angle)*s
+  }
   this.speed=function(val){//both a setter and a getter
     if (val==undefined){
-      return Math.sqrt(this.x*this.x+this.y+this.y)
+      return Math.sqrt(this.vx*this.vx+this.vy*this.vy)
     }else{
+      console.log(val)
       var s=this.speed()
       this.vx=this.vx/s*val
       this.vy=this.vy/s*val
@@ -188,7 +189,6 @@ function ball() {
   }
 
   this.bounce= function(direction,line){
-    console.log(direction)
     if (direction=='right'){
       this.vx = Math.abs(this.vx)
       //this.x += Math.abs(this.x-line)
@@ -219,14 +219,14 @@ function ball() {
     }
   }
   this.bottomCollision= function() {
-    //assumes that there is only 1 paddle
-    //should make the direction detection more interesting
-    if (this.left()>paddle1.x && this.right()<paddle1.x+paddle1.length){
+    if (this.right()>paddle1.x && this.left()<paddle1.x+paddle1.length){
       if (this.bottom()>paddle1.y){
-        this.bounce('up')
-        //this.direction(-Math.atan(5/(this.x-paddle1.x-paddle1.length)))
+        //this.bounce('up')
+        this.direction(Math.acos((this.x-paddle1.x-paddle1.length/2)/paddle1.length))
+        if(this.speed()<MAXSPEED){
+          this.speed(this.speed()+0.01)
+        }
       }
-      console.log(this.bottom()>HEIGHT)
     }else if (this.bottom()>HEIGHT){
       this.bounce('up',0)//possibly unnecesary, but powerups
       this.lifeLost()
@@ -252,26 +252,6 @@ function ball() {
         }        
         if (hit){
           block.hit()
-/*
-old collision detection
-var hit=false
-        if (this.bottom()>block.bottom){
-          this.bounce('down',block.bottom)
-          hit=true
-        }else if (this.top()>block.top){
-          this.bounce('up',block.top)
-          hit=true
-        }if (this.left()>block.left){
-          this.bounce('right',block.right)
-          hit=true
-        }else if (this.right()<block.right){
-          this.bounce('left',block.left)
-          hit=true
-        }        
-        if (hit){
-          block.hit()
-
-*/
         }
       }
     }
