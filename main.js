@@ -19,14 +19,14 @@ var WIDTH=500
 var HEIGHT=500
 
 var MAXSPEED=0.3
-var STARTSPEED=0.1
+var STARTSPEED=0.2
 var lives=3
 var gameOver=false
 
 var paddle1=new paddle()
 var ball1=new ball()
 var blocks=[]//[new block(100,150,50,20,4)]
-level(4,4)
+level(3,3)
 //var levels=2 or 3 D array
 
 //inputs
@@ -146,7 +146,6 @@ function ball() {
     }
     var s=this.speed()
     console.log(angle)
-    console.log(s)
     this.vy= -Math.sin(angle)*s
     this.vx=Math.cos(angle)*s
   }
@@ -178,8 +177,8 @@ function ball() {
       this.y=paddle1.y-this.radius
       if (keys[SPACEBAR]){
         this.state='playing' 
-        this.vy= -STARTSPEED//mn needs fixing
-        this.vx= -STARTSPEED //mn needs fixing
+        this.vy= -STARTSPEED
+        this.vx= 0
       }
     }else if (this.state=='playing'){
       this.x=this.x+this.vx*deltaT
@@ -222,7 +221,18 @@ function ball() {
     if (this.right()>paddle1.x && this.left()<paddle1.x+paddle1.length){
       if (this.bottom()>paddle1.y){
         //this.bounce('up')
-        this.direction(Math.acos((this.x-paddle1.x-paddle1.length/2)/paddle1.length))
+        var MULTIPLIER= 2
+        var angle=((Math.acos((this.x-paddle1.x-paddle1.length/2)/paddle1.length))-Math.PI/2)*MULTIPLIER+Math.PI/2
+        if (!(angle>0+0.1 && angle<Math.PI-0.1)){
+          if (angle>Math.PI/2){
+            console.log("left")
+            angle=Math.PI-0.3
+          }else{
+            angle=Math.PI*2+0.3
+            console.log("right")
+          }
+         }
+        this.direction(angle)
         if(this.speed()<MAXSPEED){
           this.speed(this.speed()+0.01)
         }
@@ -305,4 +315,3 @@ function block (x,y,width,height,durability){
     }
   }
 }
-
