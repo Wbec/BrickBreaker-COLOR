@@ -250,7 +250,7 @@ function ball() {
         if (this.bottom()>block.bottom){
           this.bounce('down',block.bottom)
           hit=true
-        }else if (this.top()>block.top){
+        }else if (this.top()<block.top){
           this.bounce('up',block.top)
           hit=true
         }if (this.left()<block.left){
