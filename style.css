@@ -1,14 +1,55 @@
 body {
   font-family: "Open Sans", sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction: column;
 }
 
 canvas {
   border: 1px solid;
 }
 
+
+#container{
+	font-family: "Open Sans", sans-serif;
+     display:flex;
+     justify-content:center;
+     align-items:center;
+     flex-direction: column;
+	position: relative;
+}
+
 #lives{
   position: absolute;
+  top: 0px;
+  left: 0px;
   padding-top: 5px;
   padding-left: 5px;
   color: darkred;
+}
+
+/* Button CSS
+ * This is the button used for
+ * initiating the game
+ * it fades out after being clicked (SEE main.js)
+ */
+#startGameBTN{
+	background-color: #dddddd;
+	border-radius: 40px;
+	border:none;
+	color: #555555;
+	margin:15px;
+	padding: 10px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 12px;
+}
+#startGameBTN:focus{
+	background-color: #cccccc;
+	outline:none;
+}
+#startGameBTN:hover{
+	background-color: #bbbbbb;
+	outline:none;
 }

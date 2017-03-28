@@ -1,11 +1,15 @@
 //add a start screen
 
 //various bits of code are copied from or inspired the example project: (https://thimbleprojects.org/mfoucault/230435/)
+$( document ).ready(function() {
+	$("#startGameBTN").click(function() {
+		console.log("hello");
+		$('#startGameBTN').fadeOut("slow");
+		newGame()
+		window.requestAnimationFrame(draw)
+	});
+});
 
-$(document).click(function() {
-	newGame()
-	window.requestAnimationFrame(draw)
-})
 
 var keys={}
 var SPACEBAR=32
