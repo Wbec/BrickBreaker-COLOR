@@ -1,5 +1,6 @@
 body {
   font-family: "Open Sans", sans-serif;
+  background-color: #2A2D34;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -7,7 +8,9 @@ body {
 }
 
 canvas {
-  border: 1px solid;
+  border: 3px solid;
+  border-radius: 10px;
+  background-color: #ffffff ;
 }
 
 
@@ -29,27 +32,59 @@ canvas {
   color: darkred;
 }
 
+#mobileControls{
+	display:none;
+	width:100%
+}
+
+#leftBTN{
+	float:left;
+	background-color: #00E500;
+	border-color: #009900;
+}
+#rightBTN{
+	float:left;
+	background-color: #0000E5;
+	border-color: #000099;
+}
+#launchBTN{
+	float:right;
+	background-color: #E50000;
+	border-color: #990000;
+}
+
 /* Button CSS
  * This is the button used for
  * initiating the game
  * it fades out after being clicked (SEE main.js)
  */
-#startGameBTN{
-	background-color: #dddddd;
+.BTN{
+	background-color: #696C70;
+	font-style: italic;;
 	border-radius: 40px;
-	border:none;
-	color: #555555;
+	border:solid;
+	color: #2A2D34;
+	border-color:#87898C;
+	border-top: none;
+	border-right:none;
+	border-left:none;
 	margin:15px;
 	padding: 10px;
 	text-align: center;
 	text-decoration: none;
 	font-size: 12px;
-}
-#startGameBTN:focus{
-	background-color: #cccccc;
 	outline:none;
+	opacity:0.6;
+	-webkit-transition:opacity 0.2s linear;
+	-moz-transition:opacity 0.2s linear;
 }
-#startGameBTN:hover{
-	background-color: #bbbbbb;
+.BTN:hover{
 	outline:none;
+	opacity:1.0;
+}
+.BTN:active{
+	border-color:#87898C;
+	border-bottom:none;
+	border-width: medium;;
+	border-top:solid;
 }

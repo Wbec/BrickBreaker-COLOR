@@ -1,12 +1,37 @@
 //add a start screen
 
 //various bits of code are copied from or inspired the example project: (https://thimbleprojects.org/mfoucault/230435/)
+var MOBILELEFT = false;
+var MOBILERIGHT = false;
+var MOBILESPACE = false;
 $( document ).ready(function() {
 	$("#startGameBTN").click(function() {
 		console.log("hello");
-		$('#startGameBTN').fadeOut("slow");
+		$('#startGameBTN').fadeOut("fast");
+		$("#mobileControls").delay(800).fadeIn("fast");
+		//$(this).empty();
 		newGame()
 		window.requestAnimationFrame(draw)
+		//Found on the JQuery Docs https://api.jquery.com/mousedown/
+		$("#rightBTN").mousedown( function() {
+			MOBILERIGHT = true;
+		})
+		$("#leftBTN").mousedown( function() {
+			MOBILELEFT = true;
+		})
+		$("#launchBTN").mousedown( function() {
+			MOBILESPACE = true;
+		})
+
+		$("#rightBTN").mouseup( function() {
+			MOBILERIGHT = false;
+		})
+		$("#leftBTN").mouseup( function() {
+			MOBILELEFT = false;
+		})
+		$("#launchBTN").mouseup( function() {
+			MOBILESPACE = false;
+		})
 	});
 });
 
@@ -123,9 +148,9 @@ function paddle() {
     		//console.log(deltaTime)
 	    	if (keys[LEFT] && keys[RIGHT]){
 	      	return
-	    	}else if (keys[LEFT]){
+	    	}else if (keys[LEFT] || MOBILELEFT){
 	      	this.x-=deltaTime*this.speed
-	    	}else if (keys[RIGHT]){
+	    	}else if (keys[RIGHT] || MOBILERIGHT){
 	      	this.x+=deltaTime*this.speed
 	    	}if (this.x<0){
 	      	this.x=0
@@ -189,10 +214,10 @@ function ball() {
     		if(this.state=='ready'){
       		this.x=paddle1.x+paddle1.length/2
       		this.y=paddle1.y-this.radius
-      		if (keys[SPACEBAR]){
-        		this.state='playing'
-        		this.vy= -STARTSPEED
-        		this.vx= 0
+      		if (keys[SPACEBAR] || MOBILESPACE){
+        			this.state='playing'
+        			this.vy= -STARTSPEED
+        			this.vx= 0
       		}
     		}else if (this.state=='playing'){
       		this.x=this.x+this.vx*deltaT
