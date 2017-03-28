@@ -11,15 +11,16 @@ var keys={}
 var SPACEBAR=32
 var LEFT=37
 var RIGHT=39
-var LEVEL = 1;
+var LEVEL = 0;
 
 var prevTime=undefined
 //var canvas=document.getElementById('canvas')
 //console.log(canvas)  //prints null??
-var WIDTH=500
-var HEIGHT=500
+var WIDTH= 500;
+var HEIGHT= 500;
 
-var MAXSPEED=0.3
+
+var MAXSPEED=0.6
 var STARTSPEED=0.2
 var lives=3
 var gameOver=false
@@ -27,7 +28,6 @@ var gameOver=false
 var paddle1=new paddle()
 var ball1=new ball()
 var blocks=[]//[new block(100,150,50,20,4)]
-var arrayLength = 0;
 level();
 //var levels=2 or 3 D array
 
@@ -46,25 +46,6 @@ function newGame(){
   }
 }
 
-function level(){
-  $.getJSON("levels.json", function(json) {
-    for(var z = 0; z < json.levels.length; z++){
-      if(json.levels[z].level_id == LEVEL){
-        var blockWidth = WIDTH/ json.levels[z].colNum;
-        var blockHeight = HEIGHT/(2.5 * json.levels[z].rowNum)
-        var PADDING = 3
-        for( var y = 0; y < json.levels[z].rowNum; y++){
-          for(var x = 0; x < json.levels[z].colNum; x++){
-            console.log('pushing block')
-            blocks.push(new block(x*blockWidth+PADDING, y*blockHeight+PADDING, blockWidth-2*PADDING, blockHeight-2*PADDING, json.levels[z].dur[y][x]))
-            arrayLength = arrayLength + 1;
-            console.log(blocks)
-          }
-        }
-      }
-    }
-  });
-}
 
 function draw(timestamp){
   if (prevTime == undefined){
@@ -72,7 +53,7 @@ function draw(timestamp){
   }
   //add more gameOver handling
   deltaT=timestamp-prevTime
-  var ctx = document.getElementById('canvas').getContext('2d')
+  var ctx = document.getElementById('canvasGame').getContext('2d')
   ctx.fillStyle = 'rgba(255,255,255,0 )'
   ctx.save()
   ctx.clearRect(0,0,WIDTH,HEIGHT,0)//add some blur and or individual object clearing
@@ -82,11 +63,35 @@ function draw(timestamp){
   ball1.draw(ctx)
   for (var i=0; i<blocks.length; i++){
     //may add some position updating blocks
-      blocks[i].draw(ctx);
+    blocks[i].draw(ctx);
+  }
+  if(blocks.length <= 0){
+    ball1.newLevel();
+    level();
   }
   ctx.restore()
   prevTime=timestamp
   window.requestAnimationFrame(draw)//why does while not work?
+}
+
+function level(){
+  if(LEVEL < 2){
+    LEVEL += 1;
+  }
+  $.getJSON("levels.json", function(json) {
+    for(var z = 0; z < json.levels.length; z++){
+      if(json.levels[z].level_id == LEVEL){
+        var blockWidth = WIDTH/ json.levels[z].colNum;
+        var blockHeight = HEIGHT/(2.5 * json.levels[z].rowNum)
+        var PADDING = 3
+        for( var y = 0; y < json.levels[z].rowNum; y++){
+          for(var x = 0; x < json.levels[z].colNum; x++){
+            blocks.push(new block(x*blockWidth+PADDING, y*blockHeight+PADDING, blockWidth-2*PADDING, blockHeight-2*PADDING, json.levels[z].dur[y][x]))
+          }
+        }
+      }
+    }
+  });
 }
 function removeBlock(block){
   /*http://stackoverflow.com/questions/5767325/how-to-remove-a-particular-element-from-an-array-in-javascript
@@ -289,6 +294,11 @@ function ball() {
       this.state='dead'
       gameOver=true
     }
+  }
+
+  this.newLevel= function(){//may want to take this out of the ball object
+    this.state='ready'
+    this.updatePosition(0)
   }
 }
 
