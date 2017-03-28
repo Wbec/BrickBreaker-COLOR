@@ -11,6 +11,7 @@ var keys={}
 var SPACEBAR=32
 var LEFT=37
 var RIGHT=39
+var LEVEL = 1;
 
 var prevTime=undefined
 //var canvas=document.getElementById('canvas')
@@ -26,7 +27,8 @@ var gameOver=false
 var paddle1=new paddle()
 var ball1=new ball()
 var blocks=[]//[new block(100,150,50,20,4)]
-level(3,3)
+var arrayLength = 0;
+level();
 //var levels=2 or 3 D array
 
 //inputs
@@ -44,17 +46,24 @@ function newGame(){
   }
 }
 
-function level(rows,columns){
-  var blockWidth=WIDTH/columns
-  var blockHeight=HEIGHT/(2.5*rows)
-  var PADDING = 3
-  //(x,y,width,height,durability)
-  for (var r=0; r<rows; r++){
-    for (var c=0; c<columns; c++){
-      console.log("adding block")
-      blocks.push(new block(c*blockWidth+PADDING,r*blockHeight+PADDING,blockWidth-2*PADDING,blockHeight-2*PADDING,4-r))//adjust durability in a more interesting way
+function level(){
+  $.getJSON("levels.json", function(json) {
+    for(var z = 0; z < json.levels.length; z++){
+      if(json.levels[z].level_id == LEVEL){
+        var blockWidth = WIDTH/ json.levels[z].colNum;
+        var blockHeight = HEIGHT/(2.5 * json.levels[z].rowNum)
+        var PADDING = 3
+        for( var y = 0; y < json.levels[z].rowNum; y++){
+          for(var x = 0; x < json.levels[z].colNum; x++){
+            console.log('pushing block')
+            blocks.push(new block(x*blockWidth+PADDING, y*blockHeight+PADDING, blockWidth-2*PADDING, blockHeight-2*PADDING, json.levels[z].dur[y][x]))
+            arrayLength = arrayLength + 1;
+            console.log(blocks)
+          }
+        }
+      }
     }
-  }
+  });
 }
 
 function draw(timestamp){
@@ -72,8 +81,9 @@ function draw(timestamp){
   ball1.updatePosition(deltaT)
   ball1.draw(ctx)
   for (var i=0; i<blocks.length; i++){
-    //may add some position updating blocks 
+    //may add some position updating blocks
     blocks[i].draw(ctx)
+    console.log('drawing');
   }
   ctx.restore()
   prevTime=timestamp
@@ -176,7 +186,7 @@ function ball() {
       this.x=paddle1.x+paddle1.length/2
       this.y=paddle1.y-this.radius
       if (keys[SPACEBAR]){
-        this.state='playing' 
+        this.state='playing'
         this.vy= -STARTSPEED
         this.vx= 0
       }
@@ -231,7 +241,7 @@ function ball() {
             angle=Math.PI*2+0.3
             console.log("right")
           }
-         }
+        }
         this.direction(angle)
         if(this.speed()<MAXSPEED){
           this.speed(this.speed()+0.01)
@@ -259,7 +269,7 @@ function ball() {
         }else if (this.right()>block.right){
           this.bounce('right',block.left)
           hit=true
-        }        
+        }
         if (hit){
           block.hit()
         }
@@ -301,6 +311,7 @@ function block (x,y,width,height,durability){
     if (this.durability>0){//we should replace this with a delete block object
       ctx.fillStyle=this.color
       ctx.fillRect(this.x,this.y,this.width,this.height)
+      console.log('really drawing')
     }
   }
 
