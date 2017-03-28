@@ -82,8 +82,7 @@ function draw(timestamp){
   ball1.draw(ctx)
   for (var i=0; i<blocks.length; i++){
     //may add some position updating blocks
-    blocks[i].draw(ctx)
-    console.log('drawing');
+      blocks[i].draw(ctx);
   }
   ctx.restore()
   prevTime=timestamp
@@ -311,7 +310,8 @@ function block (x,y,width,height,durability){
     if (this.durability>0){//we should replace this with a delete block object
       ctx.fillStyle=this.color
       ctx.fillRect(this.x,this.y,this.width,this.height)
-      console.log('really drawing')
+    } else {
+      removeBlock(this);
     }
   }
 
