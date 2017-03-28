@@ -12,6 +12,7 @@ var SPACEBAR=32
 var LEFT=37
 var RIGHT=39
 var LEVEL = 0;
+var LOADING = false;
 
 var prevTime=undefined
 //var canvas=document.getElementById('canvas')
@@ -22,7 +23,7 @@ var HEIGHT= 500;
 
 var MAXSPEED=0.6
 var STARTSPEED=0.2
-var lives=3
+var lives=15;
 var gameOver=false
 
 var paddle1=new paddle()
@@ -75,23 +76,21 @@ function draw(timestamp){
 }
 
 function level(){
-  if(LEVEL < 2){
-    LEVEL += 1;
-  }
-  $.getJSON("levels.json", function(json) {
-    for(var z = 0; z < json.levels.length; z++){
-      if(json.levels[z].level_id == LEVEL){
-        var blockWidth = WIDTH/ json.levels[z].colNum;
-        var blockHeight = HEIGHT/(2.5 * json.levels[z].rowNum)
-        var PADDING = 3
-        for( var y = 0; y < json.levels[z].rowNum; y++){
-          for(var x = 0; x < json.levels[z].colNum; x++){
-            blocks.push(new block(x*blockWidth+PADDING, y*blockHeight+PADDING, blockWidth-2*PADDING, blockHeight-2*PADDING, json.levels[z].dur[y][x]))
-          }
-        }
-      }
-    }
-  });
+	  $.getJSON("levels.json", function(json) {
+	    for(var z = 0; z < json.levels.length; z++){
+		 if(json.levels[z].level_id == LEVEL){
+		   var blockWidth = WIDTH/ json.levels[z].colNum;
+		   var blockHeight = HEIGHT/(2.5 * json.levels[z].rowNum)
+		   var PADDING = 3
+		   for( var y = 0; y < json.levels[z].rowNum; y++){
+			for(var x = 0; x < json.levels[z].colNum; x++){
+			   console.log('block added to array');
+			  blocks.push(new Block(x*blockWidth+PADDING, y*blockHeight+PADDING, blockWidth-2*PADDING, blockHeight-2*PADDING, json.levels[z].dur[y][x]))
+			}
+		   }
+		 }
+	    }
+    });
 }
 function removeBlock(block){
   /*http://stackoverflow.com/questions/5767325/how-to-remove-a-particular-element-from-an-array-in-javascript
@@ -258,7 +257,7 @@ function ball() {
   }
   this.blockCollision= function(){
     for (var i=0;i<blocks.length ;i++){
-      block=blocks[i]
+      var block=blocks[i]
       if(this.top()<block.bottom && this.bottom()>block.top && this.left()<block.right && this.right()>block.left){
         var hit=false
         if (this.bottom()>block.bottom){
@@ -299,10 +298,13 @@ function ball() {
   this.newLevel= function(){//may want to take this out of the ball object
     this.state='ready'
     this.updatePosition(0)
+    if(LEVEL <= 2){
+	   LEVEL += 1;
+    }
   }
 }
 
-function block (x,y,width,height,durability){
+function Block (x,y,width,height,durability){
   var blockColors=['red','blue','green','orange']
   this.x=x
   this.y=y
