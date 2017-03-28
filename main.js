@@ -11,7 +11,7 @@ var keys={}
 var SPACEBAR=32
 var LEFT=37
 var RIGHT=39
-var LEVEL = 0;
+var LEVEL = 1;
 var LOADING = false;
 
 var prevTime=undefined
@@ -28,7 +28,7 @@ var gameOver=false
 
 var paddle1=new paddle()
 var ball1=new ball()
-var blocks=[]//[new block(100,150,50,20,4)]
+var blocks=[]//[new block(100,150,50,20,4)
 level();
 //var levels=2 or 3 D array
 
@@ -66,25 +66,26 @@ function draw(timestamp){
     //may add some position updating blocks
     blocks[i].draw(ctx);
   }
-  if(blocks.length <= 0){
-    ball1.newLevel();
-    level();
-  }
   ctx.restore()
   prevTime=timestamp
   window.requestAnimationFrame(draw)//why does while not work?
 }
 
 function level(){
+	console.log('is it in level' + LEVEL);
 	  $.getJSON("levels.json", function(json) {
+		  console.log('is it in jquery');
 	    for(var z = 0; z < json.levels.length; z++){
+		    console.log('is it in level loop');
 		 if(json.levels[z].level_id == LEVEL){
+			  console.log('is it in level comparison loop');
 		   var blockWidth = WIDTH/ json.levels[z].colNum;
 		   var blockHeight = HEIGHT/(2.5 * json.levels[z].rowNum)
 		   var PADDING = 3
 		   for( var y = 0; y < json.levels[z].rowNum; y++){
+			    console.log('is it in y loop');
 			for(var x = 0; x < json.levels[z].colNum; x++){
-			   console.log('block added to array');
+			  console.log('block added to array');
 			  blocks.push(new Block(x*blockWidth+PADDING, y*blockHeight+PADDING, blockWidth-2*PADDING, blockHeight-2*PADDING, json.levels[z].dur[y][x]))
 			}
 		   }
@@ -100,6 +101,10 @@ function removeBlock(block){
   if (index > -1) {
     blocks.splice(index, 1);
   }
+  if(blocks.length <= 0){
+    ball1.newLevel();
+    level();
+    }
 }
 
 function paddle() {
@@ -275,10 +280,10 @@ function ball() {
         }
         if (hit){
           block.hit()
+		}
         }
       }
     }
-  }
 
   this.lifeLost= function(){//may want to take this out of the ball object
     lives-=1
