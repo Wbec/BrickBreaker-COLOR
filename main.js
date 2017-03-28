@@ -1,6 +1,6 @@
 //add a start screen
 
-//various bits of code are copied from or inspired by the pong projects **add link**
+//various bits of code are copied from or inspired the example project: (https://thimbleprojects.org/mfoucault/230435/)
 
 $(document).click(function() {
   newGame()
