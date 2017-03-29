@@ -32,6 +32,15 @@ opacity: 1.0;
 z-index:-8;
 }
 
+.screen-off{
+-webkit-animation: crt-off 0.3s 0s 1;
+-webkit-animation-timing-function: ease-out;
+-moz-animation: crt-off 0.3s 0s 1;
+-moz-animation-timing-function: ease-out;
+opacity: 0.0;
+z-index:-8;
+}
+
 #container{
 	font-family: "Open Sans", sans-serif;
      display:flex;
@@ -44,7 +53,7 @@ z-index:-8;
 #lives{
   position: absolute;
   top: 70px;
-  left: 10px;
+  left: center;
   padding-top: 5px;
   padding-left: 5px;
   color: white;
@@ -147,7 +156,18 @@ margin-top: -1px;
 	animation-fill-mode: forwards;
 }
 
+.power-off{
+	animation-name: power-off;
+	animation-duration: 1s;
+	animation-fill-mode: forwards;
+}
+
 @keyframes power-on {
     from {background-color: #2E0014;}
     to {background-color: yellow;}
+}
+
+@keyframes power-off {
+    from {background-color: yellow;}
+    to {background-color: #2E0014;}
 }

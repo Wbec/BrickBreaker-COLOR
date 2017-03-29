@@ -8,7 +8,7 @@ $( document ).ready(function() {
 	$("#startGameBTN").click(function() {
 		$("#canvasGame").addClass("screen-on")
 		$("#power-button").addClass("power-on")
-		$("#power-button").attr("disabled",true);
+		$("#startGameBTN").attr("disabled",true);
 		newGame()
 		window.requestAnimationFrame(draw)
 		//Found on the JQuery Docs https://api.jquery.com/mousedown/
@@ -44,7 +44,7 @@ var keys={}
 var SPACEBAR=32
 var LEFT=37
 var RIGHT=39
-var LEVEL = 2;
+var LEVEL = 1;
 var LOADING = false;
 
 var prevTime=undefined
@@ -57,7 +57,7 @@ var HEIGHT= 400;
 var MAXSPEED=0.6
 var STARTSPEED=0.2
 var PADDLE_START_LENGTH=60
-var lives=15;
+var lives=1;
 var gameOver=false
 
 var paddle1=new paddle()
@@ -72,6 +72,15 @@ $(window).keydown(function(event){
 })
 $(window).keyup(function(event){
   delete keys[event.keyCode]
+  if($("#rightBTN").hasClass("active")){
+	  $("#rightBTN").removeClass('active');
+  }
+  if($("#leftBTN").hasClass("active")){
+	  $("#leftBTN").removeClass('active');
+  }
+  if($("#launchBTN").hasClass("active")){
+	  $("#launchBTN").removeClass('active');
+  }
 })
 
 function newGame(){
@@ -153,8 +162,10 @@ function paddle() {
     if (keys[LEFT] && keys[RIGHT]){
       return
     }else if (keys[LEFT] || MOBILELEFT){
+	 $("#leftBTN").addClass('active');
       this.x-=deltaTime*this.speed
     }else if (keys[RIGHT] || MOBILERIGHT){
+	 $("#rightBTN").addClass('active');
       this.x+=deltaTime*this.speed
     }if (this.x<0){
       this.x=0
@@ -219,6 +230,7 @@ function ball() {
       this.x=paddle1.x+paddle1.length/2
       this.y=paddle1.y-this.radius
       if (keys[SPACEBAR] || MOBILESPACE){
+	   $("#launchBTN").addClass('active');
         this.state='playing'
         this.vy= -STARTSPEED
         this.vx= 0
@@ -344,12 +356,20 @@ function ball() {
       this.state='dead'
       gameOver=true
     }
+    if(gameOver == true){
+	    $("#power-button").removeClass("power-on")
+	    $("#power-button").attr("disabled",false);
+	    $("#canvasGame").addClass("screen-off")
+	    $("#power-button").addClass("power-off")
+	    //https://stackoverflow.com/questions/24849/execute-script-after-specific-delay-using-javascript
+	    setTimeout(function(){ location.reload()}, 1000 );
+    }
   }
 
   this.newLevel= function(){//may want to take this out of the ball object
     this.state='ready'
     this.updatePosition(0)
-    if(LEVEL <= 2){
+    if(LEVEL <= 3){
       LEVEL += 1;
     }
   }
