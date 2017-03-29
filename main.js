@@ -241,6 +241,26 @@ function ball() {
       this.vy = Math.abs(this.vy)
     }
   }
+  /*
+    this.bounce= function(direction,line){
+    if (direction=='right'){
+      this.vx = Math.abs(this.vx)
+      this.x = line+Math.abs(this.x-line)
+    }else if (direction=='left'){
+      this.vx = -Math.abs(this.vx)
+      this.x = line-Math.abs(this.x-line)
+    }else if (direction == 'up'){
+      this.vy = -Math.abs(this.vy)
+      this.y= line-Math.abs(this.y-line)
+    }else if (direction=='down'){
+      console.log('down')
+      console.log(this.y)
+      this.vy = Math.abs(this.vy)
+      this.y= line+Math.abs(this.y-line)
+      console.log(this.y)
+    }
+  }
+  */
 
   this.collisions=function(){
     this.bottomCollision()
