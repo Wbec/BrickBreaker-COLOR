@@ -6,19 +6,25 @@
     <title>Brick Breaker</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" >
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="screen.css">
   </head>
 
   <body>
     <h1>Will and Mykal's Brick Breaker </h1>
     <div id="container">
+	     <div class="topBezel"></div>
 	     <div id='lives'></div>
-    		<canvas id="canvasGame" height="500" width="500">  </canvas>
-    		<button class="BTN" id="startGameBTN">Click Here To Start The game</button>
-		<div id="mobileControls">
-			<!-- http://fontawesome.io SOURCE FOR BUTTON ICONS -->
-			<button class="BTN" id="leftBTN"> <i class="fa fa-arrow-left" aria-hidden="true"></i>  </button>
-			<button class="BTN" id="rightBTN"> <i class="fa fa-arrow-right" aria-hidden="true"></i> </button>
-			<button class="BTN" id="launchBTN"> LAUNCH </button>
+		<div id="screen-border">
+    			<canvas id="canvasGame" height="400" width="400">  </canvas>
+		</div>
+		<div id="controls">
+			<div class="bottomBezel">
+				<!-- http://fontawesome.io SOURCE FOR BUTTON ICONS -->
+				<button class="BTN" id="leftBTN"> <i class="fa fa-arrow-left" aria-hidden="true"></i>  </button>
+				<button class="BTN" id="rightBTN"> <i class="fa fa-arrow-right" aria-hidden="true"></i> </button>
+				<center><button class="BTN" id="startGameBTN"> <span id="power-button"> </span> <div class="wholePower">POWER ON</div></button>
+				<button class="BTN" id="launchBTN"> LAUNCH </button></center>
+			</div>
 		</div>
 
     </div>
@@ -28,4 +34,5 @@
 		integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
 		crossorigin="anonymous"></script>
   <script src="main.js"></script>
+  <script src="resize.js"></script>
 </html>

@@ -6,10 +6,9 @@ var MOBILERIGHT = false;
 var MOBILESPACE = false;
 $( document ).ready(function() {
 	$("#startGameBTN").click(function() {
-		console.log("hello");
-		$('#startGameBTN').fadeOut("fast");
-		$("#mobileControls").delay(800).fadeIn("fast");
-		//$(this).empty();
+		$("#canvasGame").addClass("screen-on")
+		$("#power-button").addClass("power-on")
+		$("#power-button").attr("disabled",true);
 		newGame()
 		window.requestAnimationFrame(draw)
 		//Found on the JQuery Docs https://api.jquery.com/mousedown/
@@ -25,12 +24,15 @@ $( document ).ready(function() {
 
 		$("#rightBTN").mouseup( function() {
 			MOBILERIGHT = false;
+			$("#rightBTN").removeClass('active');
 		})
 		$("#leftBTN").mouseup( function() {
 			MOBILELEFT = false;
+			$("#leftBTN").removeClass('active');
 		})
 		$("#launchBTN").mouseup( function() {
 			MOBILESPACE = false;
+			$("#launchBTN").removeClass('active');
 		})
 	});
 });
@@ -46,8 +48,8 @@ var LOADING = false;
 var prevTime=undefined
 //var canvas=document.getElementById('canvas')
 //console.log(canvas)  //prints null??
-var WIDTH= 500;
-var HEIGHT= 500;
+var WIDTH= 400;
+var HEIGHT= 400;
 
 
 var MAXSPEED=0.6
@@ -67,6 +69,15 @@ $(window).keydown(function(event){
 })
 $(window).keyup(function(event){
 	delete keys[event.keyCode]
+	if($("#rightBTN").hasClass("active")){
+		$("#rightBTN").removeClass('active');
+	}
+	if($("#leftBTN").hasClass("active")){
+		$("#leftBTN").removeClass('active');
+	}
+	if($("#launchBTN").hasClass("active")){
+		$("#launchBTN").removeClass('active');
+	}
 })
 
 function newGame(){
@@ -134,7 +145,7 @@ function removeBlock(block){
 function paddle() {
   	this.length=60 //mn*
   	this.height=10 //mn*
-  	this.color='black'
+  	this.color='white'
   	this.speed=0.5
 
   	this.y= HEIGHT - this.height
@@ -144,14 +155,17 @@ function paddle() {
     	ctx.fillStyle = this.color
     	ctx.fillRect(this.x, this.y, this.length, this.height)
   }
+  //used this for making the buttons push down https://stackoverflow.com/questions/34186640/button-active-using-javascript-and-css
   	this.updatePos=function(deltaTime){
     		//console.log(deltaTime)
 	    	if (keys[LEFT] && keys[RIGHT]){
 	      	return
 	    	}else if (keys[LEFT] || MOBILELEFT){
+			$("#leftBTN").addClass('active');
 	      	this.x-=deltaTime*this.speed
 	    	}else if (keys[RIGHT] || MOBILERIGHT){
 	      	this.x+=deltaTime*this.speed
+			$("#rightBTN").addClass('active');
 	    	}if (this.x<0){
 	      	this.x=0
 	    	}if (this.x+this.length>WIDTH){
@@ -166,7 +180,7 @@ function ball() {
 	this.y = 100
 	this.vx = 0//mn used elsewhere for launch
 	this.vy = 0
-	this.color='black'
+	this.color='white'
 	this.state='ready'//playing and dead are the other states
 	//could use cartesian/polar co-ords
   	this.top=function(){
@@ -215,6 +229,7 @@ function ball() {
       		this.x=paddle1.x+paddle1.length/2
       		this.y=paddle1.y-this.radius
       		if (keys[SPACEBAR] || MOBILESPACE){
+				$("#launchBTN").addClass('active');
         			this.state='playing'
         			this.vy= -STARTSPEED
         			this.vx= 0
