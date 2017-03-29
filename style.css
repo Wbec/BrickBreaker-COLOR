@@ -57,17 +57,19 @@ z-index:-8;
 	border-top: none;
 	border-bottom-right-radius: 32px;
 	border-bottom-left-radius: 32px;
-	background-color: #222222;
+	background-color: #111111;
+	border-color:#111111;
 }
 
 .topBezel{
 	width:400.8px;
 	height:50px;
 	border:solid 10px;
+	border-color:#111111;
 	border-bottom: none;
 	border-top-right-radius: 32px;
 	border-top-left-radius: 32px;
-	background-color: #222222;
+	background-color: #111111;
 }
 
 #leftBTN{
