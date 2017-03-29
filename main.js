@@ -1,6 +1,6 @@
-//add a start screen
-
 //various bits of code are copied from or inspired the example project: (https://thimbleprojects.org/mfoucault/230435/)
+//some code in the remove block method is from a stack overflow post, more detail on which lines in the method.
+
 var MOBILELEFT = false;
 var MOBILERIGHT = false;
 var MOBILESPACE = false;
@@ -307,6 +307,7 @@ function ball() {
   }
 
   this.lifeLost= function(){//may want to take this out of the ball object
+    paddle1.length=PADDLE_START_LENGTH
     lives-=1
     $('#lives').empty()
     for (var i=0; i<lives; i++){
@@ -332,7 +333,7 @@ function ball() {
 
 function Block (x,y,width,height,durability){
   console.log(durability)
-  var blockColors=['red','blue','green','orange']
+  var blockColors=['green','yellow','orange','red']
   this.x=x
   this.y=y
   this.width=width
@@ -341,9 +342,9 @@ function Block (x,y,width,height,durability){
   if (durability=='E'){
     this.color='limegreen'
   }else if(durability=='L'){
-    this.color='pink'
+    this.color='hotpink'
   }else if(durability=='S'){
-    this.color='blue'
+    this.color='aqua'
   }else{
     this.color=blockColors[this.durability-1]
   }
@@ -353,10 +354,11 @@ function Block (x,y,width,height,durability){
   this.bottom=y+height
 
   this.draw=function(ctx){
-    if (this.durability>0){
+    //we might want to move this to the load level method
+    if (this.durability>0 || this.durability=="E" || this.durability=="S" || this.durability=="L"){
       ctx.fillStyle=this.color
       ctx.fillRect(this.x,this.y,this.width,this.height)
-    } else {
+    }else {
       removeBlock(this);
     }
   }
@@ -372,6 +374,7 @@ function Block (x,y,width,height,durability){
       for (var i=0; i<lives; i++){
         $('#lives').append('<i class="fa fa-heart" aria-hidden="true"></i>')
       }
+      removeBlock(this)
     }else if(this.durability=='S'){
       ball1.speed((ball1.speed())/2)
       removeBlock(this)
