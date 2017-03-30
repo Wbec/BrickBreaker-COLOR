@@ -21,11 +21,20 @@ var STARTSPEED=0.3
 var Paddle_START_LENGTH=60
 var lives=1;
 var gameOver=false
+//Audio Documentation from MDN and the sound is from here http://themushroomkingdom.net/sounds/wav/smw/smw_coin.wav
+//Sound Effects
+var startupSound = new Audio("./sfx/smw_coin.wav");
+var gameOverSound = new Audio("./sfx/smw_game_over.wav");
+var blockBreakSound = new Audio("./sfx/smw_bubble_pop.wav");
+var levelCompleteSound = new Audio("./sfx/smw_level_up.wav");
+var lifeUpSound = new Audio("./sfx/smw_1-up.wav");
+var powerUpSound = new Audio("./sfx/smw_power-up.wav");
 
 //JQUERY handling
 $( document ).ready(function() {
 	$("#startGameBTN").click(function() {
 		//SCREEN ANIMATION. see screen.css
+		startupSound.play();
 		$("#canvasGame").addClass("screen-on")
 		$("#power-button").addClass("power-on")
 		$("#startGameBTN").attr("disabled",true);
@@ -144,6 +153,7 @@ function removeBlock(block){
   	}
   	if(blocks.length <= 0){
     		Ball1.newLevel();
+		levelCompleteSound.play();
     		level();
   	}
 }
@@ -346,6 +356,7 @@ function Ball() {
       		gameOver=true
     		}
     		if(gameOver == true){
+			gameOverSound.play();
 	    		$("#power-button").removeClass("power-on")
 	    		$("#power-button").attr("disabled",false);
 	    		$("#canvasGame").addClass("screen-off")
@@ -398,10 +409,13 @@ function Block (x,y,width,height,durability){
   	}
 
   	this.hit=function(){
+
     		if (this.durability=='E'){
+			powerUpSound.play();
       		Paddle1.length+=20
       		removeBlock(this)
     		}else if(this.durability=='L'){
+			lifeUpSound.play();
       		lives+=1
       		$('#lives').empty()
       		for (var i=0; i<lives; i++){
@@ -409,9 +423,11 @@ function Block (x,y,width,height,durability){
       		}
       		removeBlock(this)
     		}else if(this.durability=='S'){
+			powerUpSound.play();
       		Ball1.speed((Ball1.speed())*1.5)
       		removeBlock(this)
     		}else{
+			blockBreakSound.play();
       		this.durability-=1
       		if (this.durability<=0){
         			removeBlock(this)
