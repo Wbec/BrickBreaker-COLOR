@@ -1,9 +1,27 @@
 //various bits of code are copied from or inspired the example project: (https://thimbleprojects.org/mfoucault/230435/)
 //some code in the remove block method is from a stack overflow post, more detail on which lines in the method.
 
+//Button isPressed Variable Declarations
 var MOBILELEFT = false;
 var MOBILERIGHT = false;
 var MOBILESPACE = false;
+
+//General Global Declarations
+var keys={}
+var SPACEBAR=32
+var LEFT=37
+var RIGHT=39
+var LEVEL = 1;
+var LOADING = false;
+var prevTime=undefined
+var WIDTH= 400;
+var HEIGHT= 400;
+var MAXSPEED=0.8
+var STARTSPEED=0.3
+var PADDLE_START_LENGTH=60
+var lives=1;
+var gameOver=false
+
 $( document ).ready(function() {
 	$("#startGameBTN").click(function() {
 		$("#canvasGame").addClass("screen-on")
@@ -40,32 +58,9 @@ $( document ).ready(function() {
 	});
 });
 
-
-
-
-var keys={}
-var SPACEBAR=32
-var LEFT=37
-var RIGHT=39
-var LEVEL = 1;
-var LOADING = false;
-
-var prevTime=undefined
-//var canvas=document.getElementById('canvas')
-//console.log(canvas)  //prints null??
-var WIDTH= 400;
-var HEIGHT= 400;
-
-
-var MAXSPEED=0.6
-var STARTSPEED=0.2
-var PADDLE_START_LENGTH=60
-var lives=1;
-var gameOver=false
-
 var paddle1=new paddle()
 var ball1=new ball()
-var blocks=[]//[new block(100,150,50,20,4)
+var blocks=[]
 level();
 //var levels=2 or 3 D array
 
@@ -201,14 +196,13 @@ function ball() {
   }
   this.direction=function(angle){
     if (angle==undefined){
-      //incomplete
       Math.arctan(this.vy/this.vx)
     }
     var s=this.speed()
     this.vy= -Math.sin(angle)*s
     this.vx=Math.cos(angle)*s
   }
-  this.speed=function(val){//both a setter and a getter
+  this.speed=function(val){
     if (val==undefined){
       return Math.sqrt(this.vx*this.vx+this.vy*this.vy)
     }else{
@@ -256,26 +250,6 @@ function ball() {
       this.vy = Math.abs(this.vy)
     }
   }
-  /*
-    this.bounce= function(direction,line){
-    if (direction=='right'){
-      this.vx = Math.abs(this.vx)
-      this.x = line+Math.abs(this.x-line)
-    }else if (direction=='left'){
-      this.vx = -Math.abs(this.vx)
-      this.x = line-Math.abs(this.x-line)
-    }else if (direction == 'up'){
-      this.vy = -Math.abs(this.vy)
-      this.y= line-Math.abs(this.y-line)
-    }else if (direction=='down'){
-      console.log('down')
-      console.log(this.y)
-      this.vy = Math.abs(this.vy)
-      this.y= line+Math.abs(this.y-line)
-      console.log(this.y)
-    }
-  }
-  */
 
   this.collisions=function(){
     this.bottomCollision()
@@ -297,7 +271,6 @@ function ball() {
   this.bottomCollision= function() {
     if (this.right()>paddle1.x && this.left()<paddle1.x+paddle1.length){
       if (this.bottom()>paddle1.y){
-        //this.bounce('up')
         var MULTIPLIER= 2
         var angle=((Math.acos((this.x-paddle1.x-paddle1.length/2)/paddle1.length))-Math.PI/2)*MULTIPLIER+Math.PI/2
         if (!(angle>0+0.1 && angle<Math.PI-0.1)){
@@ -425,7 +398,7 @@ function Block (x,y,width,height,durability){
       }
       removeBlock(this)
     }else if(this.durability=='S'){
-      ball1.speed((ball1.speed())/2)
+      ball1.speed((ball1.speed())*1.5)
       removeBlock(this)
     }else{
       this.durability-=1
