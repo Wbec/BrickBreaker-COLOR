@@ -34,6 +34,9 @@ $( document ).ready(function() {
 			MOBILESPACE = false;
 			$("#launchBTN").removeClass('active');
 		})
+		$("#hide-docs").slideUp(400);
+		$("#show-docs").delay(401).slideDown();
+		$('#show-docs').delay(402).css("display","flex");
 	});
 });
 
@@ -361,6 +364,8 @@ function ball() {
 	    $("#power-button").attr("disabled",false);
 	    $("#canvasGame").addClass("screen-off")
 	    $("#power-button").addClass("power-off")
+	    $("#hide-docs").slideDown(400);
+	    $("#show-docs").hide();
 	    //https://stackoverflow.com/questions/24849/execute-script-after-specific-delay-using-javascript
 	    setTimeout(function(){ location.reload()}, 1000 );
     }

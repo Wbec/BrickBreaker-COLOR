@@ -44,6 +44,7 @@ box-shadow: inset 0 0 100px rgba(0,0,0,1.5);
 	padding:10px;
 	padding-bottom:-2px;
 	z-index:-10;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .screen-on{
@@ -92,6 +93,7 @@ z-index:-8;
 	border-bottom-left-radius: 32px;
 	background-color: #111111;
 	border-color:#111111;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .topBezel{
@@ -103,6 +105,7 @@ z-index:-8;
 	border-top-right-radius: 32px;
 	border-top-left-radius: 32px;
 	background-color: #111111;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 #leftBTN{
@@ -182,6 +185,7 @@ margin-top: -1px;
 	background-color: #ffffff;
 	padding:10px;
 	padding-top:20px;
+	border-radius:32px;
 	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
