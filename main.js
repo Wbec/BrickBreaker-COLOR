@@ -18,18 +18,21 @@ var WIDTH= 400;
 var HEIGHT= 400;
 var MAXSPEED=0.8
 var STARTSPEED=0.3
-var PADDLE_START_LENGTH=60
+var Paddle_START_LENGTH=60
 var lives=1;
 var gameOver=false
 
+//JQUERY handling
 $( document ).ready(function() {
 	$("#startGameBTN").click(function() {
+		//SCREEN ANIMATION. see screen.css
 		$("#canvasGame").addClass("screen-on")
 		$("#power-button").addClass("power-on")
 		$("#startGameBTN").attr("disabled",true);
-		newGame()
+		setTimeout(function(){ newGame() }, 300 );
 		window.requestAnimationFrame(draw)
 		//Found on the JQuery Docs https://api.jquery.com/mousedown/
+		//Handling Button press simulations
 		$("#rightBTN").mousedown( function() {
 			MOBILERIGHT = true;
 		})
@@ -52,19 +55,20 @@ $( document ).ready(function() {
 			MOBILESPACE = false;
 			$("#launchBTN").removeClass('active');
 		})
+		//Hiding the Description
 		$("#hide-docs").slideUp(400);
 		$("#show-docs").delay(401).slideDown();
 		$('#show-docs').delay(402).css("display","flex");
 	});
 });
 
-var paddle1=new paddle()
-var ball1=new ball()
+//Declaring Game Objects and Initializing th first level
+var Paddle1=new Paddle()
+var Ball1=new Ball()
 var blocks=[]
 level();
-//var levels=2 or 3 D array
 
-//inputs
+//input Detection
 $(window).keydown(function(event){
   keys[event.keyCode] = true
 })
@@ -81,36 +85,37 @@ $(window).keyup(function(event){
   }
 })
 
+//Initalizes the lives whenever a new game is started, draws lives
 function newGame(){
   $('#lives').empty()
   for (var i=0; i<lives; i++){
-    $('#lives').append('<i class="fa fa-heart" aria-hidden="true"></i>')
+    ( this ).$('#lives').append('<i class="fa fa-heart" aria-hidden="true"></i>')
   }
 }
 
+//The Main Draw Function, Draws all things within the camvas element
 function draw(timestamp){
   if (prevTime == undefined){
     prevTime=timestamp
   }
-  //add more gameOver handling
   deltaT=timestamp-prevTime
   var ctx = document.getElementById('canvasGame').getContext('2d')
   ctx.fillStyle = 'rgba(255,255,255,0 )'
   ctx.save()
-  ctx.clearRect(0,0,WIDTH,HEIGHT,0)//add some blur and or individual object clearing
-  paddle1.updatePos(deltaT)
-  paddle1.draw(ctx)//may combine these into 1 function per object
-  ball1.updatePosition(deltaT)
-  ball1.draw(ctx)
+  ctx.clearRect(0,0,WIDTH,HEIGHT,0)
+  Paddle1.updatePos(deltaT)
+  Paddle1.draw(ctx)
+  Ball1.updatePosition(deltaT)
+  Ball1.draw(ctx)
   for (var i=0; i<blocks.length; i++){
-    //may add some position updating blocks
     blocks[i].draw(ctx);
   }
   ctx.restore()
   prevTime=timestamp
-  window.requestAnimationFrame(draw)//why does while not work?
+  window.requestAnimationFrame(draw)
 }
 
+//Loads in the level from a .json file and loads it into an array of block objects
 function level(){
   $.getJSON("levels.json", function(json) {
     for(var z = 0; z < json.levels.length; z++){
@@ -128,6 +133,7 @@ function level(){
   });
 }
 
+//Removes a block object from the array: usally on collision with a Ball resulting in a negative/0 durability
 function removeBlock(block){
   /*http://stackoverflow.com/questions/5767325/how-to-remove-a-particular-element-from-an-array-in-javascript
   	is ths source for the next 4 lines
@@ -137,13 +143,14 @@ function removeBlock(block){
     blocks.splice(index, 1);
   }
   if(blocks.length <= 0){
-    ball1.newLevel();
+    Ball1.newLevel();
     level();
   }
 }
 
-function paddle() {
-  this.length=PADDLE_START_LENGTH
+//The Declaration of the Paddle Object. Contains all code for the Paddle and its functions
+function Paddle() {
+  this.length=Paddle_START_LENGTH
   this.height=10 //mn*
   this.color='white'
   this.speed=0.5
@@ -156,7 +163,6 @@ function paddle() {
     ctx.fillRect(this.x, this.y, this.length, this.height)
   }
   this.updatePos=function(deltaTime){
-    //console.log(deltaTime)
     if (keys[LEFT] && keys[RIGHT]){
       return
     }else if (keys[LEFT] || MOBILELEFT){
@@ -173,15 +179,15 @@ function paddle() {
   }
 }
 
-function ball() {
+//The Declaraion of the Ball Object. Contains all code for the Ball and its functions
+function Ball() {
   this.radius= 10
   this.x = 100
   this.y = 100
-  this.vx = 0//mn used elsewhere for launch
+  this.vx = 0
   this.vy = 0
   this.color='white'
-  this.state='ready'//playing and dead are the other states
-  //could use cartesian/polar co-ords
+  this.state='ready'
   this.top=function(){
     return this.y-this.radius
   }
@@ -224,8 +230,8 @@ function ball() {
 
   this.updatePosition= function (deltaT){
     if(this.state=='ready'){
-      this.x=paddle1.x+paddle1.length/2
-      this.y=paddle1.y-this.radius
+      this.x=Paddle1.x+Paddle1.length/2
+      this.y=Paddle1.y-this.radius
       if (keys[SPACEBAR] || MOBILESPACE){
 	   $("#launchBTN").addClass('active');
         this.state='playing'
@@ -269,10 +275,10 @@ function ball() {
   }
 
   this.bottomCollision= function() {
-    if (this.right()>paddle1.x && this.left()<paddle1.x+paddle1.length){
-      if (this.bottom()>paddle1.y){
+    if (this.right()>Paddle1.x && this.left()<Paddle1.x+Paddle1.length){
+      if (this.bottom()>Paddle1.y){
         var MULTIPLIER= 2
-        var angle=((Math.acos((this.x-paddle1.x-paddle1.length/2)/paddle1.length))-Math.PI/2)*MULTIPLIER+Math.PI/2
+        var angle=((Math.acos((this.x-Paddle1.x-Paddle1.length/2)/Paddle1.length))-Math.PI/2)*MULTIPLIER+Math.PI/2
         if (!(angle>0+0.1 && angle<Math.PI-0.1)){
           if (angle>Math.PI/2){
             angle=Math.PI-0.3
@@ -318,8 +324,8 @@ function ball() {
     }
   }
 
-  this.lifeLost= function(){//may want to take this out of the ball object
-    paddle1.length=PADDLE_START_LENGTH
+  this.lifeLost= function(){
+    Paddle1.length=Paddle_START_LENGTH
     lives-=1
     $('#lives').empty()
     for (var i=0; i<lives; i++){
@@ -344,7 +350,7 @@ function ball() {
     }
   }
 
-  this.newLevel= function(){//may want to take this out of the ball object
+  this.newLevel= function(){
     this.state='ready'
     this.updatePosition(0)
     if(LEVEL <= 3){
@@ -353,6 +359,7 @@ function ball() {
   }
 }
 
+//The Declaraion of the Block Object. Contains all code for the Block and its functions
 function Block (x,y,width,height,durability){
   console.log(durability)
   var blockColors=['green','yellow','orange','red']
@@ -376,7 +383,6 @@ function Block (x,y,width,height,durability){
   this.bottom=y+height
 
   this.draw=function(ctx){
-    //we might want to move this to the load level method
     if (this.durability>0 || this.durability=="E" || this.durability=="S" || this.durability=="L"){
       ctx.fillStyle=this.color
       ctx.fillRect(this.x,this.y,this.width,this.height)
@@ -386,9 +392,8 @@ function Block (x,y,width,height,durability){
   }
 
   this.hit=function(){
-    //console.log('block hit')
     if (this.durability=='E'){
-      paddle1.length+=20
+      Paddle1.length+=20
       removeBlock(this)
     }else if(this.durability=='L'){
       lives+=1
@@ -398,7 +403,7 @@ function Block (x,y,width,height,durability){
       }
       removeBlock(this)
     }else if(this.durability=='S'){
-      ball1.speed((ball1.speed())*1.5)
+      Ball1.speed((Ball1.speed())*1.5)
       removeBlock(this)
     }else{
       this.durability-=1
