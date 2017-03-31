@@ -253,7 +253,7 @@ function Ball() {
 	   			$("#launchBTN").addClass('active');
         			this.state='playing'
         			this.vy= -STARTSPEED
-        			this.vx= 0
+        			this.vx= 0.003
       		}
     		}else if (this.state=='playing'){
       		this.x=this.x+this.vx*deltaT
@@ -415,25 +415,33 @@ function Block (x,y,width,height,durability){
       		Paddle1.length+=20
       		removeBlock(this)
     		}else if(this.durability=='L'){
-			lifeUpSound.play();
-      		lives+=1
-      		$('#lives').empty()
-      		for (var i=0; i<lives; i++){
-        			$('#lives').append('<i class="fa fa-heart" aria-hidden="true"></i>')
+      			lifeUpSound.play();
+      			lives+=1
+      			if (Ball1.speed>=MAXSPEED){
+       			lives+=1;
       		}
-      		removeBlock(this)
-    		}else if(this.durability=='S'){
+		$('#lives').empty()
+      		for (var i=0; i<lives; i++){
+      			$('#lives').append('<i class="fa fa-heart" aria-hidden="true"></i>')
+      		}
+    		removeBlock(this)
+		}else if(this.durability=='S'){
 			powerUpSound.play();
-      		Ball1.speed((Ball1.speed())*1.5)
-      		removeBlock(this)
+			var s =Ball1.speed() 
+			if (s*1.5<MAXSPEED){
+				Ball1.speed((Ball1.speed())*1.5)
+			}else{
+				Ball1.speed(MAXSPEED)
+			}
+      			removeBlock(this)
     		}else{
 			blockBreakSound.play();
-      		this.durability-=1
-      		if (this.durability<=0){
+      			this.durability-=1
+      			if (this.durability<=0){
         			removeBlock(this)
-      		}else{
-      			this.color=blockColors[this.durability-1]
-      		}
+      			}else{
+      				this.color=blockColors[this.durability-1]
+      			}
     		}
   	}
 }
