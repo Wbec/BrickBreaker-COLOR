@@ -379,69 +379,80 @@ function Ball() {
 
 //The Declaraion of the Block Object. Contains all code for the Block and its functions
 function Block (x,y,width,height,durability){
-  	var blockColors=['green','yellow','orange','red']
-  	this.x=x
-  	this.y=y
-  	this.width=width
-  	this.height=height
-  	this.durability=durability
-  	if (durability=='E'){
-    		this.color='limegreen'
-  	}else if(durability=='L'){
-    		this.color='hotpink'
-  	}else if(durability=='S'){
-    		this.color='aqua'
-  	}else{
-    		this.color=blockColors[this.durability-1]
-  	}
-  	this.left=x
-  	this.right=x+width
-  	this.top=this.y
-  	this.bottom=y+height
+  var blockColors=['green','yellow','orange','firebrick']
+  this.x=x
+  this.y=y
+  this.width=width
+  this.height=height
+  this.durability=durability
+  if (durability=='E'){
+    this.color='limegreen'
+  }else if(durability=='L'){
+    this.color='hotpink'
+  }else if(this.durability=='F'){
+    this.color='red'
+  }else if(durability=='S'){
+    this.color='aqua'
+  }else{
+    this.color=blockColors[this.durability-1]
+  }
+  this.left=x
+  this.right=x+width
+  this.top=this.y
+  this.bottom=y+height
 
-  	this.draw=function(ctx){
-    		if (this.durability>0 || this.durability=="E" || this.durability=="S" || this.durability=="L"){
-      		ctx.fillStyle=this.color
-      		ctx.fillRect(this.x,this.y,this.width,this.height)
-    		}else {
-      		removeBlock(this);
-    		}
-  	}
+  this.draw=function(ctx){
+    if (this.durability>0 || this.durability=="E" || this.durability=="S" || this.durability=="L" || this.durability=='F'){
+      ctx.fillStyle=this.color
+      ctx.fillRect(this.x,this.y,this.width,this.height)
+    }else {
+      removeBlock(this);
+    }
+  }
 
-  	this.hit=function(){
+  this.hit=function(){
 
-    		if (this.durability=='E'){
-			powerUpSound.play();
-      		Paddle1.length+=20
-      		removeBlock(this)
-    		}else if(this.durability=='L'){
-      			lifeUpSound.play();
-      			lives+=1
-      			if (Ball1.speed>=MAXSPEED){
-       			lives+=1;
-      		}
-		$('#lives').empty()
-      		for (var i=0; i<lives; i++){
-      			$('#lives').append('<i class="fa fa-heart" aria-hidden="true"></i>')
-      		}
-    		removeBlock(this)
-		}else if(this.durability=='S'){
-			powerUpSound.play();
-			var s =Ball1.speed() 
-			if (s*1.5<MAXSPEED){
-				Ball1.speed((Ball1.speed())*1.5)
-			}else{
-				Ball1.speed(MAXSPEED)
-			}
-      			removeBlock(this)
-    		}else{
-			blockBreakSound.play();
-      			this.durability-=1
-      			if (this.durability<=0){
-        			removeBlock(this)
-      			}else{
-      				this.color=blockColors[this.durability-1]
-      			}
-    		}
-  	}
+    if (this.durability=='E'){
+      powerUpSound.play();
+      Paddle1.length+=20
+      removeBlock(this)
+    }else if(this.durability=='L'){
+      lifeUpSound.play();
+      lives+=1
+      if (Ball1.speed>=MAXSPEED){
+        lives+=1;
+      }
+      $('#lives').empty()
+      for (var i=0; i<lives; i++){
+        $('#lives').append('<i class="fa fa-heart" aria-hidden="true"></i>')
+      }
+      removeBlock(this)
+    }else if(this.durability=='S'){
+      powerUpSound.play();
+      var s =Ball1.speed() 
+      if (s*0.5>STARTSPEED*0.75){
+        Ball1.speed((Ball1.speed())*0.5)
+      }else{
+        Ball1.speed(STARTSPEED*0.75)
+      }
+      removeBlock(this)
+    }else if(this.durability=='F'){
+      powerUpSound.play();
+      var s =Ball1.speed() 
+      if (s*1.5<MAXSPEED){
+        Ball1.speed((Ball1.speed())*1.5)
+      }else{
+        Ball1.speed(MAXSPEED)
+      }
+      removeBlock(this)
+    }else{
+      blockBreakSound.play();
+      this.durability-=1
+      if (this.durability<=0){
+        removeBlock(this)
+      }else{
+        this.color=blockColors[this.durability-1]
+      }
+    }
+  }
 }
