@@ -363,8 +363,15 @@ function Ball() {
 	    		$("#power-button").addClass("power-off")
 	    		$("#hide-docs").slideDown(400);
 	    		$("#show-docs").hide();
-	    		//https://stackoverflow.com/questions/24849/execute-script-after-specific-delay-using-javascript
-	    		setTimeout(function(){ location.reload()}, 1000 );
+	    		//https://www.w3schools.com/jsref/met_win_settimeout.asp
+			//https://stackoverflow.com/questions/7000190/detect-all-firefox-versions-in-js
+			//This should fix issue #5 : https://github.com/MykalMachon/BrickBreaker-COLOR/issues/5
+			if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
+     			setTimeout(function(){ location.reload(true)}, 1000 );
+			} else {
+				setTimeout(function(){ location.reload(false)}, 1000 );
+			}
+
     		}
   	}
 
