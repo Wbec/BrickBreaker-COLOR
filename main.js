@@ -8,19 +8,19 @@ var MOBILESPACE = false;
 
 //General Global Declarations
 var keys={}
-var SPACEBAR=32
-var LEFT=37
-var RIGHT=39
+var SPACEBAR=32;
+var LEFT=37;
+var RIGHT=39;
 var LEVEL = 1;
 var LOADING = false;
-var prevTime=undefined
+var prevTime=undefined;
 var WIDTH= 400;
 var HEIGHT= 400;
-var MAXSPEED=0.8
-var STARTSPEED=0.3
-var Paddle_START_LENGTH=60
+var MAXSPEED=0.9;
+var STARTSPEED=0.3;
+var Paddle_START_LENGTH=60;
 var lives=1;
-var gameOver=false
+var gameOver=false;
 //Audio Documentation from MDN and the sound is from here http://themushroomkingdom.net/sounds/wav/smw/smw_coin.wav
 //Sound Effects
 var startupSound = new Audio("./sfx/smw_coin.wav");
@@ -429,7 +429,7 @@ function Block (x,y,width,height,durability){
       removeBlock(this)
     }else if(this.durability=='S'){
       powerUpSound.play();
-      var s =Ball1.speed() 
+      var s =Ball1.speed()
       if (s*0.5>STARTSPEED*0.75){
         Ball1.speed((Ball1.speed())*0.5)
       }else{
@@ -438,7 +438,7 @@ function Block (x,y,width,height,durability){
       removeBlock(this)
     }else if(this.durability=='F'){
       powerUpSound.play();
-      var s =Ball1.speed() 
+      var s =Ball1.speed()
       if (s*1.5<MAXSPEED){
         Ball1.speed((Ball1.speed())*1.5)
       }else{
